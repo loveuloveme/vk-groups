@@ -29,6 +29,7 @@ export default function useFetchGroups(filter: GroupFilter[], limit: number, ski
     }, [isLoading, mockFetch.data]);
 
     useEffect(() => {
+        setError(null);
         fetch();
     }, [filter, limit, skip]);
 

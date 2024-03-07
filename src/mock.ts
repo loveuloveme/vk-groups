@@ -13,8 +13,8 @@ export const groups: Group[] = [
 
 function generateUser(): User {
     return {
-        last_name: faker.name.lastName(),
-        first_name: faker.name.firstName()
+        last_name: faker.person.lastName(),
+        first_name: faker.person.firstName()
     };
 }
 
@@ -23,9 +23,9 @@ function generateGroup(): Group {
         id: faker.number.int(),
         name: faker.company.name(),
         closed: faker.datatype.boolean(),
-        avatar_color: faker.color.rgb(),
+        avatar_color: faker.datatype.boolean({ probability: 0.5 }) ? faker.color.rgb() : undefined,
         members_count: faker.number.int({ min: 10, max: 10_000_000 }),
-        friends: Math.random() > 0.5 ? faker.helpers.arrayElements(users, { min: 0, max: 20 }) : undefined
+        friends: faker.datatype.boolean({ probability: 0.5 }) ? faker.helpers.arrayElements(users, { min: 0, max: 20 }) : undefined
     };
 }
 

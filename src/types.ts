@@ -24,7 +24,7 @@ export type GroupFilter =
         value: boolean,
     } | {
         key: 'avatar_color',
-        value: string,
+        value: string | undefined,
     } | {
         key: 'friends',
         value: boolean,

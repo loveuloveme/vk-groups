@@ -16,14 +16,17 @@ export const GroupItem = (props: IGroupItemProps) => {
     return (
         <>
             <SimpleCell
+                style={{
+                    minHeight: '100px'
+                }}
                 before={
-                    <Avatar
+                    avatar_color ? <Avatar
                         size={100}
                         gradientColor="custom"
                         style={{
                             backgroundColor: avatar_color ?? 'transparent',
                         }}
-                    />
+                    /> : null
                 }
                 after={isFriendsSubs ?
                     <Button

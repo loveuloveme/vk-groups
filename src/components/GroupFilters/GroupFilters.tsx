@@ -32,7 +32,7 @@ export const GroupFilters = (props: IGroupFiltersProps) => {
         if (color) {
             filters.push({
                 key: 'avatar_color',
-                value: color
+                value: color === 'without' ? undefined : color
             });
         }
 
@@ -79,6 +79,7 @@ export const GroupFilters = (props: IGroupFiltersProps) => {
                         disabled={isDisabled || colors.isLoading}
                         options={[
                             { label: colors.isLoading ? 'Загрузка' : 'Все', value: '' },
+                            { label: 'Нет', value: 'without' },
                             ...(!colors.isLoading ? colors.data!.map(color => ({ label: color, value: color })) : [])
                         ]}
 
