@@ -1,6 +1,7 @@
 export interface GetGroupsResponse {
     result: 1 | 0;
     data?: Group[];
+    total?: number;
 }
 
 export interface Group {
@@ -9,10 +10,22 @@ export interface Group {
     closed: boolean;
     avatar_color?: string;
     members_count: number;
-    friends?: User[]
+    friends?: User[];
 }
 
 export interface User {
     first_name: string;
-    last_name: string
+    last_name: string;
 }
+
+export type GroupFilter =
+    | {
+        key: 'closed',
+        value: boolean,
+    } | {
+        key: 'avatar_color',
+        value: string,
+    } | {
+        key: 'friends',
+        value: boolean,
+    }

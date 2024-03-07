@@ -1,112 +1,118 @@
-import { Group, Header, FormItem, FormLayoutGroup, Select } from '@vkontakte/vkui';
+import { Group, Header, FormItem, FormLayoutGroup, Select, Button, Div } from '@vkontakte/vkui';
+import { useEffect, useState } from 'react';
+import { useGroupList } from '../GroupList/GroupListContext';
+import { GroupFilter } from '@/types';
+import useMockFetch from '@/hooks/useMockFetch';
+import { getColors } from '@/mock';
+import { IGroupFiltersProps } from './types';
 
-export const GroupFilters = () => {
+import './index.css';
+
+export const GroupFilters = (props: IGroupFiltersProps) => {
+    const { onChange } = props;
+
+    const [isPrivate, setPrivate] = useState<string>('');
+    const [color, setColor] = useState<string>('');
+    const [isFriends, setFriends] = useState<string>('');
+
+    const { groups, isLoading } = useGroupList();
+
+    const colors = useMockFetch(() => getColors());
+
+    useEffect(() => {
+        const filters: GroupFilter[] = [];
+
+        if (isPrivate) {
+            filters.push({
+                key: 'closed',
+                value: isPrivate === 'private' ? true : false
+            });
+        }
+
+        if (color) {
+            filters.push({
+                key: 'avatar_color',
+                value: color
+            });
+        }
+
+        if (isFriends) {
+            filters.push({
+                key: 'friends',
+                value: isFriends === 'with' ? true : false
+            });
+        }
+
+        onChange(filters);
+    }, [isPrivate, color, isFriends]);
+
+    const resetFilter = () => {
+        setPrivate('');
+        setColor('');
+        setFriends('');
+    };
+
+    const isDisabled = groups === null || isLoading;
+
     return (
         <Group header={<Header mode="secondary">Фильтры</Header>}>
-
             <FormLayoutGroup mode="horizontal">
                 <FormItem
                     top="Тип приватности"
                 >
                     <Select
+                        disabled={isDisabled}
                         options={[
-                            { label: 'Все', value: 'any' },
-                            { label: 'Закрытая', value: 'closed' },
-                            { label: 'Открытая', value: 'opened' },
-                        ]} />
+                            { label: 'Все', value: '' },
+                            { label: 'Закрытая', value: 'private' },
+                            { label: 'Открытая', value: 'public' },
+                        ]}
+
+                        value={isPrivate}
+                        onChange={(e) => setPrivate(e.target.value)}
+                    />
                 </FormItem>
                 <FormItem
                     top="Цвет"
                 >
                     <Select
+                        disabled={isDisabled || colors.isLoading}
                         options={[
-                            { label: 'Все', value: 'any' },
-                            { label: 'Закрытая', value: 'closed' },
-                            { label: 'Открытая', value: 'opened' },
-                        ]} />
+                            { label: colors.isLoading ? 'Загрузка' : 'Все', value: '' },
+                            ...(!colors.isLoading ? colors.data!.map(color => ({ label: color, value: color })) : [])
+                        ]}
+
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                    />
                 </FormItem>
                 <FormItem
                     top="Наличие друзей"
                 >
                     <Select
+                        disabled={isDisabled}
+
                         options={[
-                            { label: 'Все', value: 'any' },
-                            { label: 'Да', value: 'closed' },
-                            { label: 'Нет', value: 'opened' },
-                        ]} />
+                            { label: 'Все', value: '' },
+                            { label: 'Да', value: 'with' },
+                            { label: 'Нет', value: 'without' },
+                        ]}
+
+                        value={isFriends}
+                        onChange={(e) => setFriends(e.target.value)}
+                    />
                 </FormItem>
             </FormLayoutGroup>
-            {/*
-                <FormLayoutGroup mode="horizontal">
-                    <FormItem top="Avatar.Badge or Avatar.BadgeWithPreset">
-                        <Select
-                            options={[
-                                { label: DEFAULT_VALUE, value: DEFAULT_VALUE },
-                                { label: '📝 Avatar.Badge', value: 'header-1', disabled: true },
-                                {
-                                    label: 'children={<Icon20GiftCircleFillRed />}',
-                                    value: 'children',
-                                },
-                                {
-                                    label: '📝 Avatar.BadgeWithPreset',
-                                    value: 'header-2',
-                                    disabled: true,
-                                },
-                                { label: 'preset="online"', value: 'online', hierarchy: 1 },
-                                { label: 'preset="online-mobile"', value: 'online-mobile' },
-                            ]}
-                            value={badge}
-                            onChange={(e) => setBadge(e.target.value)}
-                        />
-                    </FormItem>
-                    <FormItem top="Avatar.Badge[background]">
-                        <Select
-                            options={[
-                                { label: DEFAULT_VALUE, value: DEFAULT_VALUE },
-                                { label: 'stroke', value: 'stroke' },
-                                { label: 'shadow', value: 'shadow' },
-                            ]}
-                            value={badgeBackground}
-                            disabled={badge !== 'children'}
-                            onChange={(e) => setBadgeBackground(e.target.value)}
-                        />
-                    </FormItem>
-                </FormLayoutGroup>
-
-                <FormLayoutGroup mode="horizontal">
-                    <FormItem top="Avatar.Overlay">
-                        <Checkbox checked={overlay} onChange={(e) => setOverlay(e.target.checked)}>
-                            overlay (example, Icon24AddOutline, Icon28AddOutline)
-                        </Checkbox>
-                    </FormItem>
-                </FormLayoutGroup>
-
-                <FormLayoutGroup mode="horizontal">
-                    <FormItem top="Avatar.Overlay[theme]">
-                        <Select
-                            options={[
-                                { label: DEFAULT_VALUE, value: DEFAULT_VALUE },
-                                { label: 'light', value: 'light' },
-                                { label: 'dark', value: 'dark' },
-                            ]}
-                            value={overlayTheme}
-                            disabled={!overlay}
-                            onChange={(e) => setOverlayTheme(e.target.value)}
-                        />
-                    </FormItem>
-                    <FormItem top="Avatar.Overlay[visibility]">
-                        <Select
-                            options={[
-                                { label: DEFAULT_VALUE, value: DEFAULT_VALUE },
-                                { label: 'on-hover', value: 'on-hover' },
-                                { label: 'always', value: 'always' },
-                            ]}
-                            value={overlayVisibility}
-                            disabled={!overlay}
-                            onChange={(e) => setOverlayVisibility(e.target.value)}
-                        />
-                    </FormItem>
-                </FormLayoutGroup> */}
+            <Div>
+                <Button
+                    stretched={true}
+                    disabled={isDisabled}
+                    mode='tertiary'
+                    onClick={() => resetFilter()}
+                >
+                    Сбросить
+                </Button>
+            </Div>
         </Group>
     );
 };

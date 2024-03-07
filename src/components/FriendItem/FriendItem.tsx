@@ -1,4 +1,4 @@
-import { SimpleCell } from '@vkontakte/vkui';
+import { Avatar, SimpleCell } from '@vkontakte/vkui';
 import { IFriendItemProps } from './types';
 
 
@@ -8,7 +8,9 @@ export const FriendItem = (props: IFriendItemProps) => {
     } = props;
 
     return (
-        <SimpleCell>
+        <SimpleCell
+            before={<Avatar initials={last_name.slice(0, 1) + '.' + first_name.slice(0, 1) + '.'} />}
+        >
             {last_name + ' ' + first_name}
         </SimpleCell>
     );

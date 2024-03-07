@@ -16,12 +16,15 @@ export const GroupItem = (props: IGroupItemProps) => {
     return (
         <>
             <SimpleCell
-                before={<Avatar
-                    size={100}
-                    gradientColor="custom"
-                    style={{
-                        backgroundColor: avatar_color ?? 'transparent',
-                    }} />}
+                before={
+                    <Avatar
+                        size={100}
+                        gradientColor="custom"
+                        style={{
+                            backgroundColor: avatar_color ?? 'transparent',
+                        }}
+                    />
+                }
                 after={isFriendsSubs ?
                     <Button
                         mode='tertiary'
@@ -32,7 +35,8 @@ export const GroupItem = (props: IGroupItemProps) => {
                     >
                         Показать {friends?.length} друзей
                     </Button>
-                    : null}
+                    : null
+                }
                 subtitle={(closed ? 'Закрытое' : 'Открытое') + ' сообщество'}
                 extraSubtitle={numberWithSpaces(members_count) + ' подписчиков'}
                 hasActive={false}
