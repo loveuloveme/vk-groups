@@ -46,7 +46,7 @@ export function getColors(): Promise<string[]> {
 export function getGroups(filters: GroupFilter[], limit: number, skip: number): Promise<GetGroupsResponse> {
     return new Promise((res, rej) => {
         setTimeout(() => {
-            if (faker.datatype.boolean({ probability: 0 })) {
+            if (faker.datatype.boolean({ probability: 0.01 })) {
                 res({
                     result: 0
                 });
@@ -54,14 +54,14 @@ export function getGroups(filters: GroupFilter[], limit: number, skip: number): 
                 return;
             }
 
-            if (faker.datatype.boolean({ probability: 0 })) {
+            if (faker.datatype.boolean({ probability: 0.01 })) {
                 res({
                     result: 1
                 });
                 return;
             }
 
-            if (faker.datatype.boolean({ probability: 0 })) {
+            if (faker.datatype.boolean({ probability: 0.01 })) {
                 rej(new Error('Network Error'));
                 return;
             }
